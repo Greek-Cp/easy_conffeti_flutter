@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/assets/87766c11-83c9-48ea-b84c-caad3b5bfd49)# Easy Confetti
+![image](https://github.com/user-attachments/assets/87766c11-83c9-48ea-b84c-caad3b5bfd49)
+## Easy Confetti
 
 <p align="center">
   ![image](https://github.com/user-attachments/assets/3edf9d1a-0111-4707-84a7-0a913cc1ac25)
