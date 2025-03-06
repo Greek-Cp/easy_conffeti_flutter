@@ -25,7 +25,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  easy_conffeti: ^0.1.3
+  easy_conffeti: ^0.1.4
 ```
 
 Or install via command line:
@@ -294,3 +294,188 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <p align="center">
   Made with ❤️ by <a href="https://github.com/Greek-Cp">Yanuar Tri Laksono</a>
 </p>
+
+Here's a more detailed project structure overview that will help future AI understand how to add new features to your Easy Confetti project:
+
+# Easy Confetti Project Structure - Detailed Overview
+
+## 1. PARTICLE SHAPES SYSTEM
+- **Primary Files**: 
+  - `lib/src/painters/confetti_particle.dart`
+  - `lib/src/painters/particle_shape_renderer.dart`
+
+- **Architecture**:
+  - Based on Strategy Pattern with `ParticleShapeRenderer` as the abstract base class
+  - Each shape is implemented as a separate class extending this base class
+  - The `render(Canvas canvas, Paint paint, double size)` method must be overridden to implement drawing
+
+- **Adding New Shapes**:
+  - Create a new class extending `ParticleShapeRenderer`
+  - Implement the `render()` method with your custom shape drawing logic using Flutter's Canvas API
+  - Add your new shape to the factory method in `ConfettiParticle.create()`
+  - Consider updating the `ConfettiStyle` enum if you want it selectable in the UI
+
+- **Example Implementation**:
+```dart
+class DiamondShapeRenderer extends ParticleShapeRenderer {
+  @override
+  void render(Canvas canvas, Paint paint, double size) {
+    final path = Path();
+    path.moveTo(0, -size);  // Top
+    path.lineTo(size, 0);   // Right
+    path.lineTo(0, size);   // Bottom
+    path.lineTo(-size, 0);  // Left
+    path.close();
+    
+    canvas.drawPath(path, paint);
+  }
+}
+```
+
+## 2. ANIMATION STYLES
+- **Primary Files**:
+  - `lib/src/enums/confetti_enums.dart` (AnimationConfetti enum)
+  - `lib/src/widgets/confetti_dialog.dart` (_generateParticles method)
+  - `lib/src/painters/confetti_particle.dart` (velocity handling)
+
+- **Architecture**:
+  - Each animation style has two key components:
+    1. Initial position generation logic
+    2. Velocity vector calculation
+
+- **Adding New Animations**:
+  1. Add a new value to the `AnimationConfetti` enum
+  2. Implement position logic in the switch statement in `_generateParticles`
+  3. Implement velocity calculation logic in the same method
+  4. Consider physics interactions for special effects
+
+- **Example Implementation**:
+```dart
+// In enums file
+enum AnimationConfetti {
+  fountain,
+  explosion,
+  fireworks,
+  rain,
+  falling,
+  tornado,
+  spiral, // New animation
+}
+
+// In _generateParticles method
+switch (widget.animationStyle) {
+  // ... existing cases
+  case AnimationConfetti.spiral:
+    position = const Offset(0.5, 0.5);
+    double angle = i / quantity * 2 * math.pi;
+    double distance = rand.nextDouble() * 0.5;
+    velocity = Offset(
+      math.cos(angle) * distance,
+      math.sin(angle) * distance,
+    );
+    break;
+}
+```
+
+## 3. COLOR THEMES
+- **Primary Files**:
+  - `lib/src/enums/confetti_enums.dart` (ConfettiColorTheme enum)
+  - `lib/src/widgets/confetti_dialog.dart` (_getColorFromTheme method)
+  - `lib/src/models/card_colors.dart` (for model-based colors)
+
+- **Architecture**:
+  - Basic themes use direct color generation logic
+  - Model-based themes pull from CardColorModel instances
+  - Color mixing is controlled by isColorMixedFromModel flag
+
+- **Adding New Color Themes**:
+  1. Add new value to the `ConfettiColorTheme` enum
+  2. Implement color generation logic in the `_getColorFromTheme` method
+  3. For model-based themes, define the CardColorModel in card_colors.dart
+
+- **Example Implementation**:
+```dart
+// In enum file
+enum ConfettiColorTheme {
+  // ... existing values
+  sunset, // New theme
+}
+
+// In _getColorFromTheme method
+case ConfettiColorTheme.sunset:
+  return HSVColor.fromAHSV(
+    1.0,
+    rand.nextDouble() * 60.0 + 10.0, // Orange to red hues
+    0.8 + rand.nextDouble() * 0.2,
+    0.9 + rand.nextDouble() * 0.1,
+  ).toColor();
+```
+
+## 4. CONFETTI TYPES
+- **Primary Files**:
+  - `lib/src/enums/confetti_enums.dart` (ConfettiType enum)
+  - `lib/src/widgets/confetti_dialog.dart` (_getMessageColor method)
+  - `lib/src/helpers/confetti_helper.dart` (showConfettiDialog method)
+
+- **Architecture**:
+  - Types affect message color and can influence default values
+  - Types can be used for semantic differentiation
+
+- **Adding New Types**:
+  1. Add new value to the `ConfettiType` enum
+  2. Update the `_getMessageColor` method for appropriate text coloring
+  3. Consider adding default emoji sets if using emoji style
+
+- **Example Implementation**:
+```dart
+// In enum file
+enum ConfettiType {
+  // ... existing values
+  milestone, // New type
+}
+
+// In _getMessageColor method
+case ConfettiType.milestone:
+  return Colors.indigo.shade700;
+
+// In _getRandomEmoji method
+case ConfettiType.milestone:
+  List<String> milestoneEmojis = ['🏅', '💯', '📊', '📈', '🚀', '🥇'];
+  return milestoneEmojis[rand.nextInt(milestoneEmojis.length)];
+```
+
+## 5. DESIGN TOOL
+- **Primary Files**:
+  - `lib/example/lib/main.dart`
+  - `lib/example/lib/confetti_designer_page.dart`
+
+- **Architecture**:
+  - Live preview using a custom painter
+  - UI controls for all confetti parameters
+  - Code generation for easy copy-paste
+
+- **Updating for New Features**:
+  1. Add new options to the appropriate dropdown widgets
+  2. Update the particle generation logic for the preview
+  3. Make sure code snippet generation includes the new options
+
+## 6. OTHER COMPONENTS
+- **Density Control**: 
+  - Defined in `lib/src/enums/confetti_enums.dart`
+  - Implemented in `_generateParticles` method
+  
+- **Message Handling**:
+  - Implemented in the ConfettiDialog widget UI layout
+  - Styling based on confetti type in `_getMessageColor`
+
+- **Blend Modes**:
+  - Passed to Paint object in the ConfettiPainter class
+
+When adding any new features, remember to:
+1. Update README.md with the new functionality
+2. Add entries to CHANGELOG.md
+3. Update version number in pubspec.yaml
+4. Consider adding example usage in example/main.dart
+5. Make sure the live designer supports the new feature
+
+This detailed structure should help AI understand how to navigate and extend the project when adding new features in the future.
