@@ -296,5 +296,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://github.com/Greek-Cp">Alex</a>
+  Made with ❤️ by <a href="https://github.com/Greek-Cp">Yanuar Tri Laksono</a>
 </p>
