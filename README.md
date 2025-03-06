@@ -295,8 +295,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   Made with ❤️ by <a href="https://github.com/Greek-Cp">Yanuar Tri Laksono</a>
 </p>
 
-Here's a more detailed project structure overview that will help future AI understand how to add new features to your Easy Confetti project:
-
 # Easy Confetti Project Structure - Detailed Overview
 
 ## 1. PARTICLE SHAPES SYSTEM
