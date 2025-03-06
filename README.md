@@ -2,11 +2,6 @@
 ## Easy Confetti
 
 <p align="center">
-  ![image](https://github.com/user-attachments/assets/3edf9d1a-0111-4707-84a7-0a913cc1ac25)
-
-</p>
-
-<p align="center">
   <a href="https://pub.dev/packages/easy_conffeti"><img src="https://img.shields.io/pub/v/easy_conffeti.svg" alt="Pub"></a>
   <a href="https://github.com/Greek-Cp/Easy-Confetti-Flutter"><img src="https://img.shields.io/github/stars/Greek-Cp/Easy-Confetti-Flutter.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Stars"></a>
   <a href="https://github.com/Greek-Cp/Easy-Confetti-Flutter/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Greek-Cp/Easy-Confetti-Flutter" alt="License: MIT"></a>
