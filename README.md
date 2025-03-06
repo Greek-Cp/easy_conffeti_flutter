@@ -25,7 +25,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  easy_conffeti: ^0.1.2
+  easy_conffeti: ^0.1.3
 ```
 
 Or install via command line:
