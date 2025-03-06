@@ -1,8 +1,5 @@
-# Easy Confetti
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Greek-Cp/Easy-Confetti-Flutter/main/assets/confetti_banner.png" alt="Easy Confetti Banner" width="800"/>
-</p>
+![image](https://github.com/user-attachments/assets/87766c11-83c9-48ea-b84c-caad3b5bfd49)
+## Easy Confetti
 
 <p align="center">
   <a href="https://pub.dev/packages/easy_conffeti"><img src="https://img.shields.io/pub/v/easy_conffeti.svg" alt="Pub"></a>
@@ -28,7 +25,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  easy_conffeti: ^0.1.3
+  easy_conffeti: ^0.1.2
 ```
 
 Or install via command line:
@@ -219,6 +216,7 @@ await ConfettiHelper.showConfettiDialog(
 ## 📝 Live Designer Tool
 
 Easy Confetti includes a live designer tool to help you experiment with different combinations:
+![image](https://github.com/user-attachments/assets/2e8db40c-1018-4f6b-b2df-388526df9d55)
 
 ```dart
 void main() {
@@ -294,5 +292,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://github.com/Greek-Cp">Alex</a>
+  Made with ❤️ by <a href="https://github.com/Greek-Cp">Yanuar Tri Laksono</a>
 </p>
