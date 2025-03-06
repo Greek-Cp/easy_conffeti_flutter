@@ -1,0 +1,22 @@
+# Fix for main package pubspec.yaml (in the root directory)
+name: easy_conffeti
+description: A customizable confetti animation library for Flutter with various particle shapes, animations, and color themes.
+version: 0.1.0
+homepage: https://github.com/Greek-Cp/Easy-Confetti-Flutter
+
+environment:
+  sdk: ^3.5.0
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Remove the circular dependency to easy_conffeti
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  # Flutter-specific configurations
