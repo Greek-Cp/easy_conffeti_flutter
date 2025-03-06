@@ -1,3 +1,20 @@
+## 0.1.3
+
+* Change Github repo
+
+## 0.1.2
+
+* Added live preview capability in the design tool
+* Improved particle system performance with optimized rendering
+* Added support for custom message styling
+* Fixed issues with particle animation on different screen sizes
+* Enhanced color mixing algorithm for model-based themes
+* Added new shape: HeartShapeRenderer for heart-shaped confetti
+* Improved documentation with more code examples
+* Reduced memory usage for larger particle quantities
+* Added landscape mode support for the designer interface
+* Fixed animation glitches in tornado style
+
 ## 0.1.1
 
 * Initial release of Easy Confetti package
