@@ -1,3 +1,7 @@
+## 0.1.5
+
+* Add ConfettiDesignerPage to help developer make own confetti 
+
 ## 0.1.4
 
 * Update readme.md
