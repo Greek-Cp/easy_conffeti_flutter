@@ -70,14 +70,18 @@ class TestPage extends StatelessWidget {
           onPressed: () {
             ConfettiHelper.showConfettiDialog(
               context: context,
-              confettiType: ConfettiType.celebration,
-              confettiStyle: ConfettiStyle.star,
-              animationStyle: AnimationConfetti.fireworks,
-              colorTheme: ConfettiColorTheme.rainbow,
+              confettiType: ConfettiType.success,
+              confettiStyle: ConfettiStyle.paper,
+              animationStyle: AnimationConfetti.explosion,
+              colorTheme: ConfettiColorTheme.red,
               density: ConfettiDensity.medium,
-              durationInSeconds: 9,
-              message: "Congratulations! 🎉",
-              isColorMixedFromModel: false,
+              durationInSeconds: 5,
+              message: "Success! ✅",
+              cardDialog: QuizFailedCard(
+                message: "Congratulation You Already Complete The Quiz",
+                score: "20",
+              ),
+              isColorMixedFromModel: true,
             );
           },
           child: Text('Show Confetti'),

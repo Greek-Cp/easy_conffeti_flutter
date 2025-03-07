@@ -12,6 +12,7 @@ class ConfettiHelper {
     required ConfettiType confettiType,
     required ConfettiStyle confettiStyle,
     required AnimationConfetti animationStyle,
+    final Widget? cardDialog,
     bool useController = false,
     int durationInSeconds = 3,
     ConfettiColorTheme colorTheme = ConfettiColorTheme.rainbow,
@@ -19,6 +20,7 @@ class ConfettiHelper {
     ConfettiDensity density = ConfettiDensity.medium,
     BlendMode? blendMode,
     VoidCallback? onComplete,
+    bool isClosedDialogAutomatic = false,
 
     /// [NEW] jika true, setiap partikel ambil warna acak dari [card, shadow, text].
     bool isColorMixedFromModel = false,
@@ -32,11 +34,12 @@ class ConfettiHelper {
           confettiStyle: confettiStyle,
           animationStyle: animationStyle,
           colorTheme: colorTheme,
-          message: message,
           useExternalController: useController,
           externalController: null,
+          cardDialog: cardDialog,
           durationInSeconds: durationInSeconds,
           density: density,
+          isClosedDialogAutomatic: isClosedDialogAutomatic,
           blendMode: blendMode,
           onComplete: onComplete,
           isColorMixedFromModel: isColorMixedFromModel, // [NEW]

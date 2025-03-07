@@ -12,13 +12,14 @@ class ConfettiDialog extends StatefulWidget {
   final ConfettiStyle confettiStyle;
   final AnimationConfetti animationStyle;
   final ConfettiColorTheme colorTheme;
-  final String? message;
+  final Widget? cardDialog;
   final bool useExternalController;
   final AnimationController? externalController;
   final int durationInSeconds;
   final ConfettiDensity density;
   final BlendMode? blendMode;
   final VoidCallback? onComplete;
+  final bool isClosedDialogAutomatic;
 
   /// [NEW] menandakan bahwa kita mau me-random warna partikel dari [card, shadow, text]
   final bool isColorMixedFromModel;
@@ -28,8 +29,9 @@ class ConfettiDialog extends StatefulWidget {
     required this.confettiType,
     required this.confettiStyle,
     required this.animationStyle,
+    this.isClosedDialogAutomatic = false,
     this.colorTheme = ConfettiColorTheme.rainbow,
-    this.message,
+    this.cardDialog,
     required this.useExternalController,
     this.externalController,
     this.durationInSeconds = 4,
@@ -116,7 +118,9 @@ class _ConfettiDialogState extends State<ConfettiDialog>
           if (widget.onComplete != null) {
             widget.onComplete!();
           }
-          Navigator.of(context).pop();
+          if (widget.isClosedDialogAutomatic) {
+            Navigator.of(context).pop();
+          }
         }
       });
     }
@@ -475,7 +479,7 @@ class _ConfettiDialogState extends State<ConfettiDialog>
             ),
 
             // optional message
-            if (widget.message != null)
+            if (widget.cardDialog != null)
               Center(
                 child: AnimatedBuilder(
                   animation: _animationController,
@@ -484,81 +488,55 @@ class _ConfettiDialogState extends State<ConfettiDialog>
                       opacity: _fadeAnimation.value,
                       duration: const Duration(milliseconds: 300),
                       child: Transform.scale(
-                        scale: _scaleAnimation.value,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 10,
-                                spreadRadius: 2,
-                              ),
-                            ],
-                          ),
-                          child: Text(
-                            widget.message!,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: _getMessageColor(),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
+                          scale: _scaleAnimation.value,
+                          child: widget.cardDialog),
                     );
                   },
                 ),
               ),
 
             // optional close
-            Positioned(
-              bottom: 40,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (context, child) {
-                    return AnimatedOpacity(
-                      opacity: _animation.value > 0.5 ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 300),
-                      child: TextButton(
-                        onPressed: () {
-                          if (widget.onComplete != null) {
-                            widget.onComplete!();
-                          }
-                          Navigator.of(context).pop();
-                        },
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.white.withOpacity(0.8),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: Text(
-                          "Continue",
-                          style: TextStyle(
-                            color: _getMessageColor(),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
+            // Positioned(
+            //   bottom: 40,
+            //   left: 0,
+            //   right: 0,
+            //   child: Center(
+            //     child: AnimatedBuilder(
+            //       animation: _animationController,
+            //       builder: (context, child) {
+            //         return AnimatedOpacity(
+            //           opacity: _animation.value > 0.5 ? 1.0 : 0.0,
+            //           duration: const Duration(milliseconds: 300),
+            //           child: TextButton(
+            //             onPressed: () {
+            //               if (widget.onComplete != null) {
+            //                 widget.onComplete!();
+            //               }
+            //               Navigator.of(context).pop();
+            //             },
+            //             style: TextButton.styleFrom(
+            //               backgroundColor: Colors.white.withOpacity(0.8),
+            //               padding: const EdgeInsets.symmetric(
+            //                 horizontal: 24,
+            //                 vertical: 12,
+            //               ),
+            //               shape: RoundedRectangleBorder(
+            //                 borderRadius: BorderRadius.circular(30),
+            //               ),
+            //             ),
+            //             child: Text(
+            //               "Continue",
+            //               style: TextStyle(
+            //                 color: _getMessageColor(),
+            //                 fontWeight: FontWeight.bold,
+            //               ),
+            //             ),
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

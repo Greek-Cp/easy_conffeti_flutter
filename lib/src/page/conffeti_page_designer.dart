@@ -21,6 +21,7 @@ class _ConfettiDesignerPageState extends State<ConfettiDesignerPage>
   ConfettiDensity _density = ConfettiDensity.medium;
   bool _isColorMixedFromModel = false;
   int _durationInSeconds = 3;
+
   String _message = "Congratulations! 🎉";
 
   // Controllers for live preview
@@ -829,6 +830,10 @@ ConfettiHelper.showConfettiDialog(
   density: ConfettiDensity.${_density.toString().split('.').last},
   durationInSeconds: $_durationInSeconds,
   message: "$_message",
+  cardDialog: QuizCompletionCard(
+        message: "Congratulation You Already Complete The Quiz",
+        score: "40",
+      ),
   isColorMixedFromModel: $_isColorMixedFromModel,
 );''';
 
@@ -904,8 +909,978 @@ ConfettiHelper.showConfettiDialog(
       durationInSeconds: _durationInSeconds,
       colorTheme: _colorTheme,
       density: _density,
+      cardDialog: QuizCompletionCard(
+        message: "Congratulation You Already Complete The Quiz",
+        score: "40",
+      ),
       message: _message,
       isColorMixedFromModel: _isColorMixedFromModel,
+    );
+  }
+}
+
+class QuizFailedCard extends StatefulWidget {
+  final String score;
+  final String message;
+
+  const QuizFailedCard({
+    Key? key,
+    required this.score,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  State<QuizFailedCard> createState() => _QuizFailedCardState();
+}
+
+class _QuizFailedCardState extends State<QuizFailedCard>
+    with TickerProviderStateMixin {
+  // Animasi untuk kartu keseluruhan
+  late AnimationController _cardController;
+  late Animation<double> _cardScaleAnimation;
+
+  // Animasi untuk ikon sad face
+  late AnimationController _iconController;
+  late Animation<double> _iconRotateAnimation;
+
+  // Animasi untuk lingkaran skor
+  late AnimationController _scoreController;
+  late Animation<double> _scoreOpacityAnimation;
+  late Animation<double> _scoreScaleAnimation;
+
+  // Animasi untuk tombol
+  late AnimationController _buttonController;
+  late Animation<double> _buttonPulseAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Inisialisasi animasi kartu
+    _cardController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _cardScaleAnimation = CurvedAnimation(
+      parent: _cardController,
+      curve: Curves.elasticOut,
+    );
+
+    // Inisialisasi animasi ikon
+    _iconController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat(reverse: true);
+    _iconRotateAnimation = Tween<double>(
+      begin: -0.05,
+      end: 0.05,
+    ).animate(CurvedAnimation(
+      parent: _iconController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Inisialisasi animasi skor
+    _scoreController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    _scoreOpacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _scoreController,
+      curve: Interval(0.4, 0.7, curve: Curves.easeIn),
+    ));
+    _scoreScaleAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _scoreController,
+      curve: Interval(0.4, 0.8, curve: Curves.elasticOut),
+    ));
+
+    // Inisialisasi animasi tombol
+    _buttonController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..repeat(reverse: true);
+    _buttonPulseAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(
+      parent: _buttonController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Memulai semua animasi secara bertahap
+    _cardController.forward();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _scoreController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _cardController.dispose();
+    _iconController.dispose();
+    _scoreController.dispose();
+    _buttonController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Mendapatkan ukuran layar untuk responsivitas
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 360;
+    final isMediumScreen = screenSize.width >= 360 && screenSize.width < 480;
+
+    // Menghitung ukuran berdasarkan layar
+    final cardHeight = isSmallScreen ? 190.0 : (isMediumScreen ? 210.0 : 240.0);
+    final circleSize = isSmallScreen ? 65.0 : (isMediumScreen ? 75.0 : 80.0);
+    final titleFontSize = isSmallScreen ? 16.0 : (isMediumScreen ? 20.0 : 24.0);
+    final scoreFontSize = isSmallScreen ? 24.0 : (isMediumScreen ? 28.0 : 32.0);
+    final messageFontSize =
+        isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
+    final buttonFontSize =
+        isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
+    final padding = isSmallScreen ? 12.0 : (isMediumScreen ? 16.0 : 20.0);
+    final iconSize = isSmallScreen ? 16.0 : (isMediumScreen ? 18.0 : 20.0);
+    final maxLines = isSmallScreen ? 2 : 3;
+
+    return ScaleTransition(
+      scale: _cardScaleAnimation,
+      child: Container(
+        height: cardHeight,
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(
+          horizontal: padding,
+          vertical: padding / 2,
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // Card dengan dekorasi sesuai spesifikasi
+            Container(
+              height: cardHeight,
+              decoration: ShapeDecoration(
+                color: CardColors.redPrimary.card,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  side: BorderSide(
+                    color: CardColors.redPrimary.shadow,
+                    width: 3.0,
+                  ),
+                ),
+                shadows: [
+                  BoxShadow(
+                    color: CardColors.redPrimary.shadow,
+                    blurRadius: 0,
+                    offset: const Offset(4, 4),
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+            ),
+
+            // Konten kartu
+            Padding(
+              padding: EdgeInsets.all(padding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Bagian atas dengan judul dan icon sad face
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Bagian teks "Oops!"
+                      Flexible(
+                        child: FadeTransition(
+                          opacity: _scoreOpacityAnimation,
+                          child: Text(
+                            "Oops!",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: titleFontSize,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+
+                      // Icon sad face di pojok kanan atas
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: RotationTransition(
+                          turns: _iconRotateAnimation,
+                          child: Container(
+                            padding: EdgeInsets.all(isSmallScreen ? 5 : 8),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.sentiment_dissatisfied,
+                              color: CardColors.redPrimary.card,
+                              size: isSmallScreen ? 18 : 24,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: isSmallScreen ? 8 : 12),
+
+                  // Skor di dalam lingkaran dan pesan
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Lingkaran skor
+                        ScaleTransition(
+                          scale: _scoreScaleAnimation,
+                          child: Container(
+                            width: circleSize,
+                            height: circleSize,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: CardColors.redPrimary.shadow,
+                                width: 3,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: CardColors.redPrimary.shadow
+                                      .withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: TweenAnimationBuilder<double>(
+                                tween: Tween(begin: 0, end: 1),
+                                duration: const Duration(seconds: 1),
+                                builder: (context, value, child) {
+                                  // Parsing score untuk animasi penghitungan
+                                  final parts = widget.score.split('/');
+                                  if (parts.length == 2) {
+                                    final targetScore =
+                                        int.tryParse(parts[0]) ?? 0;
+                                    final totalScore =
+                                        int.tryParse(parts[1]) ?? 10;
+                                    final currentScore =
+                                        (targetScore * value).round();
+                                    return FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        "$currentScore/$totalScore",
+                                        style: TextStyle(
+                                          color: CardColors.redPrimary.text,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: scoreFontSize,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        widget.score,
+                                        style: TextStyle(
+                                          color: CardColors.redPrimary.text,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: scoreFontSize,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(width: isSmallScreen ? 8 : 12),
+
+                        // Pesan motivasi
+                        Expanded(
+                          child: FadeTransition(
+                            opacity: _scoreOpacityAnimation,
+                            child: Text(
+                              widget.message,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: messageFontSize,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: maxLines,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Tombol "Try Again"
+                  Center(
+                    child: ScaleTransition(
+                      scale: _buttonPulseAnimation,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: isSmallScreen ? 6 : 8,
+                          horizontal: isSmallScreen ? 12 : 16,
+                        ),
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(
+                              color: CardColors.redPrimary.shadow,
+                              width: 2,
+                            ),
+                          ),
+                          shadows: [
+                            BoxShadow(
+                              color: CardColors.redPrimary.shadow,
+                              blurRadius: 0,
+                              offset: const Offset(2, 2),
+                              spreadRadius: 0,
+                            ),
+                          ],
+                        ),
+                        child: IntrinsicWidth(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.refresh_rounded,
+                                color: CardColors.redPrimary.card,
+                                size: iconSize,
+                              ),
+                              SizedBox(width: isSmallScreen ? 4 : 8),
+                              Flexible(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    "Try Again",
+                                    style: TextStyle(
+                                      color: CardColors.redPrimary.text,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: buttonFontSize,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Elemen dekoratif - X marks
+            ...List.generate(6, (index) {
+              final random = math.Random(index);
+              final top = random.nextDouble() * cardHeight;
+              final left =
+                  random.nextDouble() * (screenSize.width - padding * 2);
+              final size = random.nextDouble() * 4 + 7;
+              final opacity = random.nextDouble() * 0.3 + 0.1;
+
+              return Positioned(
+                top: top,
+                left: left,
+                child: AnimatedXMark(
+                  size: size,
+                  opacity: opacity,
+                  animationController: _iconController,
+                  index: index,
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Widget untuk animasi tanda X
+class AnimatedXMark extends StatelessWidget {
+  final double size;
+  final double opacity;
+  final AnimationController animationController;
+  final int index;
+
+  const AnimatedXMark({
+    Key? key,
+    required this.size,
+    required this.opacity,
+    required this.animationController,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (context, child) {
+        final rotation = (index % 2 == 0 ? 1 : -1) *
+            math.pi *
+            0.05 *
+            animationController.value;
+
+        return Transform.rotate(
+          angle: rotation,
+          child: Opacity(
+            opacity: opacity,
+            child: Container(
+              width: size,
+              height: size,
+              child: Center(
+                child: Text(
+                  "✕",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: size,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class QuizCompletionCard extends StatefulWidget {
+  final String score;
+  final String message;
+
+  const QuizCompletionCard({
+    Key? key,
+    required this.score,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  State<QuizCompletionCard> createState() => _QuizCompletionCardState();
+}
+
+class _QuizCompletionCardState extends State<QuizCompletionCard>
+    with TickerProviderStateMixin {
+  // Animasi untuk kartu keseluruhan
+  late AnimationController _cardController;
+  late Animation<double> _cardScaleAnimation;
+
+  // Animasi untuk bintang
+  late AnimationController _starController;
+  late Animation<double> _starRotateAnimation;
+  late Animation<double> _starScaleAnimation;
+
+  // Animasi untuk konfeti
+  late AnimationController _confetiController;
+  late List<Animation<double>> _confetiAnimations;
+
+  // Animasi untuk lingkaran skor
+  late AnimationController _scoreController;
+  late Animation<double> _scoreOpacityAnimation;
+  late Animation<double> _scoreScaleAnimation;
+
+  // Animasi untuk tombol
+  late AnimationController _buttonController;
+  late Animation<double> _buttonPulseAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Inisialisasi animasi kartu
+    _cardController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _cardScaleAnimation = CurvedAnimation(
+      parent: _cardController,
+      curve: Curves.elasticOut,
+    );
+
+    // Inisialisasi animasi bintang
+    _starController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+    _starRotateAnimation = Tween<double>(
+      begin: 0,
+      end: 0.1,
+    ).animate(CurvedAnimation(
+      parent: _starController,
+      curve: Curves.easeInOut,
+    ));
+    _starScaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.2,
+    ).animate(CurvedAnimation(
+      parent: _starController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Inisialisasi animasi konfeti
+    _confetiController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat();
+    _confetiAnimations = List.generate(5, (index) {
+      return Tween<double>(
+        begin: 0,
+        end: 2 * math.pi,
+      ).animate(CurvedAnimation(
+        parent: _confetiController,
+        curve: Interval(
+          0.1 * index,
+          0.1 * index + 0.8,
+          curve: Curves.easeInOut,
+        ),
+      ));
+    });
+
+    // Inisialisasi animasi skor
+    _scoreController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    _scoreOpacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _scoreController,
+      curve: Interval(0.4, 0.7, curve: Curves.easeIn),
+    ));
+    _scoreScaleAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _scoreController,
+      curve: Interval(0.4, 0.8, curve: Curves.elasticOut),
+    ));
+
+    // Inisialisasi animasi tombol
+    _buttonController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..repeat(reverse: true);
+    _buttonPulseAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(
+      parent: _buttonController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Memulai semua animasi secara bertahap
+    _cardController.forward();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _scoreController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _cardController.dispose();
+    _starController.dispose();
+    _confetiController.dispose();
+    _scoreController.dispose();
+    _buttonController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Mendapatkan ukuran layar untuk responsivitas
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 360;
+    final isMediumScreen = screenSize.width >= 360 && screenSize.width < 480;
+
+    // Menghitung ukuran berdasarkan layar
+    final cardHeight = isSmallScreen ? 190.0 : (isMediumScreen ? 210.0 : 240.0);
+    final circleSize = isSmallScreen ? 65.0 : (isMediumScreen ? 75.0 : 80.0);
+    final titleFontSize = isSmallScreen ? 16.0 : (isMediumScreen ? 20.0 : 24.0);
+    final scoreFontSize = isSmallScreen ? 24.0 : (isMediumScreen ? 28.0 : 32.0);
+    final messageFontSize =
+        isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
+    final buttonFontSize =
+        isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
+    final padding = isSmallScreen ? 12.0 : (isMediumScreen ? 16.0 : 20.0);
+    final iconSize = isSmallScreen ? 16.0 : (isMediumScreen ? 18.0 : 20.0);
+    final maxLines = isSmallScreen ? 2 : 3;
+
+    return ScaleTransition(
+      scale: _cardScaleAnimation,
+      child: Container(
+        height: cardHeight,
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(
+          horizontal: padding,
+          vertical: padding / 2,
+        ),
+        child: Stack(
+          clipBehavior: Clip.none, // Prevent clipping for the confetti effects
+          children: [
+            // Card dengan dekorasi sesuai spesifikasi
+            Container(
+              height: cardHeight,
+              decoration: ShapeDecoration(
+                color: CardColors.purplePrimary.card,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  side: BorderSide(
+                    color: CardColors.purplePrimary.shadow,
+                    width: 3.0,
+                  ),
+                ),
+                shadows: [
+                  BoxShadow(
+                    color: CardColors.purplePrimary.shadow,
+                    blurRadius: 0,
+                    offset: const Offset(4, 4),
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+            ),
+
+            // Konten kartu
+            Padding(
+              padding: EdgeInsets.all(padding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Bagian atas dengan judul dan bintang
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Bagian teks "Congratulation!"
+                      Flexible(
+                        child: FadeTransition(
+                          opacity: _scoreOpacityAnimation,
+                          child: Text(
+                            "Congratulation!",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: titleFontSize,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+
+                      // Bintang di pojok kanan atas
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ScaleTransition(
+                          scale: _starScaleAnimation,
+                          child: RotationTransition(
+                            turns: _starRotateAnimation,
+                            child: Container(
+                              padding: EdgeInsets.all(isSmallScreen ? 5 : 8),
+                              decoration: BoxDecoration(
+                                color: Colors.amber,
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: Colors.white, width: 2),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.star,
+                                color: Colors.white,
+                                size: isSmallScreen ? 18 : 24,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: isSmallScreen ? 8 : 12),
+
+                  // Skor di dalam lingkaran dan pesan
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Lingkaran skor
+                        ScaleTransition(
+                          scale: _scoreScaleAnimation,
+                          child: Container(
+                            width: circleSize,
+                            height: circleSize,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: CardColors.purplePrimary.shadow,
+                                width: 3,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: CardColors.purplePrimary.shadow
+                                      .withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: TweenAnimationBuilder<double>(
+                                tween: Tween(begin: 0, end: 1),
+                                duration: const Duration(seconds: 1),
+                                builder: (context, value, child) {
+                                  // Parsing score untuk animasi penghitungan
+                                  final parts = widget.score.split('/');
+                                  if (parts.length == 2) {
+                                    final targetScore =
+                                        int.tryParse(parts[0]) ?? 0;
+                                    final totalScore =
+                                        int.tryParse(parts[1]) ?? 10;
+                                    final currentScore =
+                                        (targetScore * value).round();
+                                    return FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        "$currentScore/$totalScore",
+                                        style: TextStyle(
+                                          color: CardColors.purplePrimary.text,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: scoreFontSize,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        widget.score,
+                                        style: TextStyle(
+                                          color: CardColors.purplePrimary.text,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: scoreFontSize,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(width: isSmallScreen ? 8 : 12),
+
+                        // Pesan motivasi
+                        Expanded(
+                          child: FadeTransition(
+                            opacity: _scoreOpacityAnimation,
+                            child: Text(
+                              widget.message,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: messageFontSize,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: maxLines,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Tombol "Close Dialog"
+                  Center(
+                    child: ScaleTransition(
+                      scale: _buttonPulseAnimation,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: isSmallScreen ? 6 : 8,
+                          horizontal: isSmallScreen ? 12 : 16,
+                        ),
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(
+                              color: CardColors.purplePrimary.shadow,
+                              width: 2,
+                            ),
+                          ),
+                          shadows: [
+                            BoxShadow(
+                              color: CardColors.purplePrimary.shadow,
+                              blurRadius: 0,
+                              offset: const Offset(2, 2),
+                              spreadRadius: 0,
+                            ),
+                          ],
+                        ),
+                        child: IntrinsicWidth(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.replay_rounded,
+                                color: CardColors.purplePrimary.card,
+                                size: iconSize,
+                              ),
+                              SizedBox(width: isSmallScreen ? 4 : 8),
+                              Flexible(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    "Close Dialog",
+                                    style: TextStyle(
+                                      color: CardColors.purplePrimary.text,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: buttonFontSize,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Elemen dekoratif - konfeti yang berputar dan "falling"
+            ...List.generate(8, (index) {
+              // Reduced number of confetti
+              // Posisi konfeti yang lebih acak dan menarik
+              final random = math.Random(index);
+              final top = random.nextDouble() * cardHeight;
+              final left = random.nextDouble() * screenSize.width * 0.7;
+              final size = random.nextDouble() * 5 + 8;
+              final color = [
+                Colors.yellow,
+                Colors.pink,
+                Colors.green,
+                Colors.orange,
+                Colors.cyan,
+                Colors.purple,
+                Colors.red,
+              ][random.nextInt(7)];
+
+              // Membuat konfeti dengan animasi jatuh dan berputar
+              return Positioned(
+                top: top,
+                left: left,
+                child: AnimatedConfetti(
+                  color: color,
+                  size: size,
+                  animationController: _confetiController,
+                  index: index,
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Widget konfeti yang dianimasi
+class AnimatedConfetti extends StatelessWidget {
+  final Color color;
+  final double size;
+  final AnimationController animationController;
+  final int index;
+
+  const AnimatedConfetti({
+    Key? key,
+    required this.color,
+    required this.size,
+    required this.animationController,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Membuat animasi berputar
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (context, child) {
+        final animationValue = animationController.value;
+
+        // Animasi jatuh
+        final fallDistance = 20.0 * animationValue;
+
+        // Animasi berputar
+        final rotation = (index % 2 == 0 ? 1 : -1) *
+            math.pi *
+            2 *
+            animationValue *
+            (index % 3 + 1);
+
+        // Animasi muncul dan menghilang
+        final opacity = math.sin(math.pi * animationValue) * 0.8 + 0.2;
+
+        return Transform.translate(
+          offset: Offset(0, fallDistance),
+          child: Transform.rotate(
+            angle: rotation,
+            child: Opacity(
+              opacity: opacity,
+              child: child,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: color,
+          shape: index % 3 == 0 ? BoxShape.circle : BoxShape.rectangle,
+          borderRadius: index % 3 != 0 ? BorderRadius.circular(2) : null,
+        ),
+      ),
     );
   }
 }
