@@ -61,8 +61,6 @@ class ConfettiParticle {
       case ConfettiStyle.paper:
         shapeRenderer = PaperShapeRenderer();
         break;
-      default:
-        shapeRenderer = CircleShapeRenderer();
     }
 
     return ConfettiParticle(
@@ -210,8 +208,7 @@ class HeartShapeRenderer extends ParticleShapeRenderer {
     path.cubicTo(-size * 0.6, -size * 0.3, -size * 1.2, size * 0.6, 0, size);
 
     // Right curve
-    path.cubicTo(
-        size * 1.2, size * 0.6, size * 0.6, -size * 0.3, 0, size * 0.3);
+    path.cubicTo(size * 1.2, size * 0.6, size * 0.6, -size * 0.3, 0, size * 0.3);
 
     canvas.drawPath(path, paint);
   }
@@ -313,8 +310,7 @@ class ParticleFactory {
     }
 
     // Extra for celebration/levelUp
-    if (confettiType == ConfettiType.celebration ||
-        confettiType == ConfettiType.levelUp) {
+    if (confettiType == ConfettiType.celebration || confettiType == ConfettiType.levelUp) {
       quantity = (quantity * 1.5).round();
     }
 
@@ -326,13 +322,11 @@ class ParticleFactory {
       Offset velocity = _calculateInitialVelocity(animationStyle, rand);
 
       // Get color based on theme
-      Color color = _getColorFromTheme(
-          rand, colorTheme, confettiType, isColorMixedFromModel);
+      Color color = _getColorFromTheme(rand, colorTheme, confettiType, isColorMixedFromModel);
 
       // Calculate size
       double size = 5.0 + rand.nextDouble() * 5.0;
-      if (confettiStyle == ConfettiStyle.star ||
-          confettiStyle == ConfettiStyle.emoji) {
+      if (confettiStyle == ConfettiStyle.star || confettiStyle == ConfettiStyle.emoji) {
         size *= 1.5;
       }
 
@@ -370,8 +364,7 @@ class ParticleFactory {
   }
 
   // Helper methods (moved from ConfettiDialog)
-  static Offset _calculateInitialPosition(
-      AnimationConfetti style, math.Random rand) {
+  static Offset _calculateInitialPosition(AnimationConfetti style, math.Random rand) {
     switch (style) {
       case AnimationConfetti.fountain:
       case AnimationConfetti.explosion:
@@ -383,13 +376,10 @@ class ParticleFactory {
         return Offset(rand.nextDouble(), -0.2);
       case AnimationConfetti.tornado:
         return Offset(rand.nextDouble(), 0.5);
-      default:
-        return const Offset(0.5, 0.5);
     }
   }
 
-  static Offset _calculateInitialVelocity(
-      AnimationConfetti style, math.Random rand) {
+  static Offset _calculateInitialVelocity(AnimationConfetti style, math.Random rand) {
     double speed = rand.nextDouble() * 2 + 0.5;
 
     switch (style) {
@@ -424,19 +414,11 @@ class ParticleFactory {
           math.cos(angle) * radius,
           math.sin(angle) * radius,
         );
-      default:
-        return Offset(
-          (rand.nextDouble() - 0.5) * 0.8,
-          0.5 + rand.nextDouble() * 1.5,
-        );
     }
   }
 
   static Color _getColorFromTheme(
-      math.Random rand,
-      ConfettiColorTheme colorTheme,
-      ConfettiType confettiType,
-      bool isColorMixedFromModel) {
+      math.Random rand, ConfettiColorTheme colorTheme, ConfettiType confettiType, bool isColorMixedFromModel) {
     // Implementation from original code...
     // This would be moved from the original _getColorFromTheme method
     return Colors.red; // Placeholder

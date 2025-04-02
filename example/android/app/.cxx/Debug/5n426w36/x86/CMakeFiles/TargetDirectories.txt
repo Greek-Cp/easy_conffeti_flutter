@@ -1,0 +1,2 @@
+/Users/fer/Desktop/projects/sessions/conffeti/example/android/app/.cxx/Debug/5n426w36/x86/CMakeFiles/rebuild_cache.dir
+/Users/fer/Desktop/projects/sessions/conffeti/example/android/app/.cxx/Debug/5n426w36/x86/CMakeFiles/edit_cache.dir

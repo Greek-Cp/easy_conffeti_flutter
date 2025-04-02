@@ -18,6 +18,8 @@ A highly customizable Flutter confetti animation library with various particle s
 - **Customizable density and duration**: control the amount and length of the confetti effect
 - **Message support**: add custom messages to accompany your animations
 - **Extensible architecture**: easily create your own particle shapes
+- **Custom Emoji or text**: easily change the emoji or text shown as confetti
+- **Create custom confetti**: easily create your own confetti by extending `ParticleShapeRenderer`
 
 ## 📲 Installation
 
@@ -107,6 +109,52 @@ await ConfettiHelper.showConfettiDialog(
   durationInSeconds: 3,
 );
 ```
+## Custom Emoji or Text
+
+```dart
+await ConfettiHelper.showConfettiDialog(
+  context: context,
+  confettiType: ConfettiType.achievement,
+  confettiStyle: ConfettiStyle.emoji,
+  animationStyle: AnimationConfetti.fountain,
+  colorTheme: ConfettiColorTheme.gold,
+  message: "Achievement Unlocked! 🏆",
+  durationInSeconds: 3,
+  emoji: "😎 Awesome 🎉",
+);
+```
+
+## Complete custom confetti
+
+```dart
+
+await ConfettiHelper.showConfettiDialog(
+  context: context,
+  confettiType: ConfettiType.success,
+  confettiStyle: ConfettiStyle.custom,
+  animationStyle: AnimationConfetti.explosion,
+  colorTheme: ConfettiColorTheme.green,
+  message: "Success! ✅",
+  durationInSeconds: 3,
+  shapeRenderer: SquareShapeRenderer(),
+);
+
+
+/// Huge Square confetti
+class SquareShapeRenderer extends ParticleShapeRenderer {
+  @override
+  void render(Canvas canvas, Paint paint, double size) {
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(center: Offset.zero, width: 100, height: 100),
+        const Radius.circular(0),
+      ),
+      paint,
+    );
+  }
+}
+``` 
+
 
 ## 🎨 Customization
 

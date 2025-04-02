@@ -1,3 +1,8 @@
+## 0.1.6
+
+* Add option for a custom emoji / text
+* Added the option to use a complete custom confetti passing a new `shapeRenderer`
+
 ## 0.1.5
 
 * Add ConfettiDesignerPage to help developer make own confetti 
