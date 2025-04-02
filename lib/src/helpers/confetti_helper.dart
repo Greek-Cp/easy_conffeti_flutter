@@ -1,7 +1,5 @@
+import 'package:easy_conffeti/easy_conffeti.dart';
 import 'package:flutter/material.dart';
-
-import '../enums/confetti_enums.dart';
-import '../widgets/confetti_dialog.dart';
 
 /// Helper class to show confetti dialogs
 
@@ -21,6 +19,8 @@ class ConfettiHelper {
     BlendMode? blendMode,
     VoidCallback? onComplete,
     bool isClosedDialogAutomatic = false,
+    ParticleShapeRenderer? shapeRenderer,
+    String? emoji,
 
     /// [NEW] jika true, setiap partikel ambil warna acak dari [card, shadow, text].
     bool isColorMixedFromModel = false,
@@ -42,7 +42,9 @@ class ConfettiHelper {
           isClosedDialogAutomatic: isClosedDialogAutomatic,
           blendMode: blendMode,
           onComplete: onComplete,
-          isColorMixedFromModel: isColorMixedFromModel, // [NEW]
+          isColorMixedFromModel: isColorMixedFromModel,
+          shapeRenderer: shapeRenderer,
+          emoji: emoji,
         );
       },
     );

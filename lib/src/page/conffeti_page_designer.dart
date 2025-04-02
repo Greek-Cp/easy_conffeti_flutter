@@ -5,14 +5,13 @@ import 'dart:math' as math;
 import 'package:flutter/services.dart';
 
 class ConfettiDesignerPage extends StatefulWidget {
-  const ConfettiDesignerPage({Key? key}) : super(key: key);
+  const ConfettiDesignerPage({super.key});
 
   @override
   State<ConfettiDesignerPage> createState() => _ConfettiDesignerPageState();
 }
 
-class _ConfettiDesignerPageState extends State<ConfettiDesignerPage>
-    with TickerProviderStateMixin {
+class _ConfettiDesignerPageState extends State<ConfettiDesignerPage> with TickerProviderStateMixin {
   // Default configuration values
   ConfettiType _confettiType = ConfettiType.celebration;
   ConfettiStyle _confettiStyle = ConfettiStyle.star;
@@ -87,7 +86,7 @@ class _ConfettiDesignerPageState extends State<ConfettiDesignerPage>
           position = Offset(rand.nextDouble(), -0.2);
           break;
         case AnimationConfetti.tornado:
-          position = Offset(0.5, 0.7);
+          position = const Offset(0.5, 0.7);
           break;
       }
 
@@ -169,8 +168,7 @@ class _ConfettiDesignerPageState extends State<ConfettiDesignerPage>
       }
 
       double size = 4.0 + rand.nextDouble() * 4.0;
-      if (_confettiStyle == ConfettiStyle.star ||
-          _confettiStyle == ConfettiStyle.emoji) {
+      if (_confettiStyle == ConfettiStyle.star || _confettiStyle == ConfettiStyle.emoji) {
         size *= 1.5;
       }
 
@@ -242,9 +240,7 @@ class _ConfettiDesignerPageState extends State<ConfettiDesignerPage>
       ),
       body: OrientationBuilder(
         builder: (context, orientation) {
-          return orientation == Orientation.portrait
-              ? _buildPortraitLayout()
-              : _buildLandscapeLayout();
+          return orientation == Orientation.portrait ? _buildPortraitLayout() : _buildLandscapeLayout();
         },
       ),
     );
@@ -319,8 +315,7 @@ class _ConfettiDesignerPageState extends State<ConfettiDesignerPage>
           if (_message.isNotEmpty)
             Center(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.9),
                   borderRadius: BorderRadius.circular(16),
@@ -701,8 +696,7 @@ class _ConfettiDesignerPageState extends State<ConfettiDesignerPage>
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.grey.shade300),
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
             items: items.map((T item) {
               return DropdownMenuItem<T>(
@@ -783,8 +777,7 @@ class _ConfettiDesignerPageState extends State<ConfettiDesignerPage>
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               isDense: true,
             ),
             onChanged: onChanged,
@@ -909,7 +902,7 @@ ConfettiHelper.showConfettiDialog(
       durationInSeconds: _durationInSeconds,
       colorTheme: _colorTheme,
       density: _density,
-      cardDialog: QuizCompletionCard(
+      cardDialog: const QuizCompletionCard(
         message: "Congratulation You Already Complete The Quiz",
         score: "40",
       ),
@@ -924,17 +917,16 @@ class QuizFailedCard extends StatefulWidget {
   final String message;
 
   const QuizFailedCard({
-    Key? key,
+    super.key,
     required this.score,
     required this.message,
-  }) : super(key: key);
+  });
 
   @override
   State<QuizFailedCard> createState() => _QuizFailedCardState();
 }
 
-class _QuizFailedCardState extends State<QuizFailedCard>
-    with TickerProviderStateMixin {
+class _QuizFailedCardState extends State<QuizFailedCard> with TickerProviderStateMixin {
   // Animasi untuk kartu keseluruhan
   late AnimationController _cardController;
   late Animation<double> _cardScaleAnimation;
@@ -996,7 +988,7 @@ class _QuizFailedCardState extends State<QuizFailedCard>
       end: 1.0,
     ).animate(CurvedAnimation(
       parent: _scoreController,
-      curve: Interval(0.4, 0.8, curve: Curves.elasticOut),
+      curve: const Interval(0.4, 0.8, curve: Curves.elasticOut),
     ));
 
     // Inisialisasi animasi tombol
@@ -1040,10 +1032,8 @@ class _QuizFailedCardState extends State<QuizFailedCard>
     final circleSize = isSmallScreen ? 65.0 : (isMediumScreen ? 75.0 : 80.0);
     final titleFontSize = isSmallScreen ? 16.0 : (isMediumScreen ? 20.0 : 24.0);
     final scoreFontSize = isSmallScreen ? 24.0 : (isMediumScreen ? 28.0 : 32.0);
-    final messageFontSize =
-        isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
-    final buttonFontSize =
-        isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
+    final messageFontSize = isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
+    final buttonFontSize = isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
     final padding = isSmallScreen ? 12.0 : (isMediumScreen ? 16.0 : 20.0);
     final iconSize = isSmallScreen ? 16.0 : (isMediumScreen ? 18.0 : 20.0);
     final maxLines = isSmallScreen ? 2 : 3;
@@ -1161,8 +1151,7 @@ class _QuizFailedCardState extends State<QuizFailedCard>
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: CardColors.redPrimary.shadow
-                                      .withOpacity(0.3),
+                                  color: CardColors.redPrimary.shadow.withOpacity(0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -1176,12 +1165,9 @@ class _QuizFailedCardState extends State<QuizFailedCard>
                                   // Parsing score untuk animasi penghitungan
                                   final parts = widget.score.split('/');
                                   if (parts.length == 2) {
-                                    final targetScore =
-                                        int.tryParse(parts[0]) ?? 0;
-                                    final totalScore =
-                                        int.tryParse(parts[1]) ?? 10;
-                                    final currentScore =
-                                        (targetScore * value).round();
+                                    final targetScore = int.tryParse(parts[0]) ?? 0;
+                                    final totalScore = int.tryParse(parts[1]) ?? 10;
+                                    final currentScore = (targetScore * value).round();
                                     return FittedBox(
                                       fit: BoxFit.scaleDown,
                                       child: Text(
@@ -1301,8 +1287,7 @@ class _QuizFailedCardState extends State<QuizFailedCard>
             ...List.generate(6, (index) {
               final random = math.Random(index);
               final top = random.nextDouble() * cardHeight;
-              final left =
-                  random.nextDouble() * (screenSize.width - padding * 2);
+              final left = random.nextDouble() * (screenSize.width - padding * 2);
               final size = random.nextDouble() * 4 + 7;
               final opacity = random.nextDouble() * 0.3 + 0.1;
 
@@ -1332,28 +1317,25 @@ class AnimatedXMark extends StatelessWidget {
   final int index;
 
   const AnimatedXMark({
-    Key? key,
+    super.key,
     required this.size,
     required this.opacity,
     required this.animationController,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animationController,
       builder: (context, child) {
-        final rotation = (index % 2 == 0 ? 1 : -1) *
-            math.pi *
-            0.05 *
-            animationController.value;
+        final rotation = (index % 2 == 0 ? 1 : -1) * math.pi * 0.05 * animationController.value;
 
         return Transform.rotate(
           angle: rotation,
           child: Opacity(
             opacity: opacity,
-            child: Container(
+            child: SizedBox(
               width: size,
               height: size,
               child: Center(
@@ -1379,17 +1361,16 @@ class QuizCompletionCard extends StatefulWidget {
   final String message;
 
   const QuizCompletionCard({
-    Key? key,
+    super.key,
     required this.score,
     required this.message,
-  }) : super(key: key);
+  });
 
   @override
   State<QuizCompletionCard> createState() => _QuizCompletionCardState();
 }
 
-class _QuizCompletionCardState extends State<QuizCompletionCard>
-    with TickerProviderStateMixin {
+class _QuizCompletionCardState extends State<QuizCompletionCard> with TickerProviderStateMixin {
   // Animasi untuk kartu keseluruhan
   late AnimationController _cardController;
   late Animation<double> _cardScaleAnimation;
@@ -1475,14 +1456,14 @@ class _QuizCompletionCardState extends State<QuizCompletionCard>
       end: 1.0,
     ).animate(CurvedAnimation(
       parent: _scoreController,
-      curve: Interval(0.4, 0.7, curve: Curves.easeIn),
+      curve: const Interval(0.4, 0.7, curve: Curves.easeIn),
     ));
     _scoreScaleAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(
       parent: _scoreController,
-      curve: Interval(0.4, 0.8, curve: Curves.elasticOut),
+      curve: const Interval(0.4, 0.8, curve: Curves.elasticOut),
     ));
 
     // Inisialisasi animasi tombol
@@ -1527,10 +1508,8 @@ class _QuizCompletionCardState extends State<QuizCompletionCard>
     final circleSize = isSmallScreen ? 65.0 : (isMediumScreen ? 75.0 : 80.0);
     final titleFontSize = isSmallScreen ? 16.0 : (isMediumScreen ? 20.0 : 24.0);
     final scoreFontSize = isSmallScreen ? 24.0 : (isMediumScreen ? 28.0 : 32.0);
-    final messageFontSize =
-        isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
-    final buttonFontSize =
-        isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
+    final messageFontSize = isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
+    final buttonFontSize = isSmallScreen ? 12.0 : (isMediumScreen ? 14.0 : 16.0);
     final padding = isSmallScreen ? 12.0 : (isMediumScreen ? 16.0 : 20.0);
     final iconSize = isSmallScreen ? 16.0 : (isMediumScreen ? 18.0 : 20.0);
     final maxLines = isSmallScreen ? 2 : 3;
@@ -1608,8 +1587,7 @@ class _QuizCompletionCardState extends State<QuizCompletionCard>
                               decoration: BoxDecoration(
                                 color: Colors.amber,
                                 shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.white, width: 2),
+                                border: Border.all(color: Colors.white, width: 2),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.2),
@@ -1652,8 +1630,7 @@ class _QuizCompletionCardState extends State<QuizCompletionCard>
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: CardColors.purplePrimary.shadow
-                                      .withOpacity(0.3),
+                                  color: CardColors.purplePrimary.shadow.withOpacity(0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -1667,12 +1644,9 @@ class _QuizCompletionCardState extends State<QuizCompletionCard>
                                   // Parsing score untuk animasi penghitungan
                                   final parts = widget.score.split('/');
                                   if (parts.length == 2) {
-                                    final targetScore =
-                                        int.tryParse(parts[0]) ?? 0;
-                                    final totalScore =
-                                        int.tryParse(parts[1]) ?? 10;
-                                    final currentScore =
-                                        (targetScore * value).round();
+                                    final targetScore = int.tryParse(parts[0]) ?? 0;
+                                    final totalScore = int.tryParse(parts[1]) ?? 10;
+                                    final currentScore = (targetScore * value).round();
                                     return FittedBox(
                                       fit: BoxFit.scaleDown,
                                       child: Text(
@@ -1852,11 +1826,7 @@ class AnimatedConfetti extends StatelessWidget {
         final fallDistance = 20.0 * animationValue;
 
         // Animasi berputar
-        final rotation = (index % 2 == 0 ? 1 : -1) *
-            math.pi *
-            2 *
-            animationValue *
-            (index % 3 + 1);
+        final rotation = (index % 2 == 0 ? 1 : -1) * math.pi * 2 * animationValue * (index % 3 + 1);
 
         // Animasi muncul dan menghilang
         final opacity = math.sin(math.pi * animationValue) * 0.8 + 0.2;
@@ -1890,10 +1860,10 @@ class ConfettiPreview extends StatelessWidget {
   final double animationValue;
 
   const ConfettiPreview({
-    Key? key,
+    super.key,
     required this.particles,
     required this.animationValue,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

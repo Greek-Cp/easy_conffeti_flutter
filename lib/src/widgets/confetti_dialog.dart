@@ -20,12 +20,14 @@ class ConfettiDialog extends StatefulWidget {
   final BlendMode? blendMode;
   final VoidCallback? onComplete;
   final bool isClosedDialogAutomatic;
+  final String? emoji;
+  final ParticleShapeRenderer? shapeRenderer;
 
   /// [NEW] menandakan bahwa kita mau me-random warna partikel dari [card, shadow, text]
   final bool isColorMixedFromModel;
 
   const ConfettiDialog({
-    Key? key,
+    super.key,
     required this.confettiType,
     required this.confettiStyle,
     required this.animationStyle,
@@ -34,19 +36,21 @@ class ConfettiDialog extends StatefulWidget {
     this.cardDialog,
     required this.useExternalController,
     this.externalController,
-    this.durationInSeconds = 4,
+    this.durationInSeconds = 3,
     this.density = ConfettiDensity.medium,
     this.blendMode,
     this.onComplete,
     this.isColorMixedFromModel = false, // default false
-  }) : super(key: key);
+    this.emoji,
+    this.shapeRenderer,
+  }) : assert((shapeRenderer != null && confettiStyle == ConfettiStyle.custom || shapeRenderer == null),
+            'If shapeRenderer is not null, confettiStyle must be custom.');
 
   @override
   State<ConfettiDialog> createState() => _ConfettiDialogState();
 }
 
-class _ConfettiDialogState extends State<ConfettiDialog>
-    with TickerProviderStateMixin {
+class _ConfettiDialogState extends State<ConfettiDialog> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
   bool _usingInternalController = false;
@@ -152,8 +156,7 @@ class _ConfettiDialogState extends State<ConfettiDialog>
     }
 
     // Extra for celebration/levelUp
-    if (widget.confettiType == ConfettiType.celebration ||
-        widget.confettiType == ConfettiType.levelUp) {
+    if (widget.confettiType == ConfettiType.celebration || widget.confettiType == ConfettiType.levelUp) {
       quantity = (quantity * 1.5).round();
     }
 
@@ -221,8 +224,7 @@ class _ConfettiDialogState extends State<ConfettiDialog>
       Color color = _getColorFromTheme(rand);
 
       double size = 5.0 + rand.nextDouble() * 5.0;
-      if (widget.confettiStyle == ConfettiStyle.star ||
-          widget.confettiStyle == ConfettiStyle.emoji) {
+      if (widget.confettiStyle == ConfettiStyle.star || widget.confettiStyle == ConfettiStyle.emoji) {
         size *= 1.5;
       }
 
@@ -235,20 +237,20 @@ class _ConfettiDialogState extends State<ConfettiDialog>
 
       String? emoji;
       if (widget.confettiStyle == ConfettiStyle.emoji) {
-        emoji = _getRandomEmoji(widget.confettiType);
+        emoji = widget.emoji ?? _getRandomEmoji(widget.confettiType);
       }
 
       // Create the appropriate shape renderer based on confetti style
       ParticleShapeRenderer shapeRenderer;
       switch (widget.confettiStyle) {
         case ConfettiStyle.custom:
-          shapeRenderer = CircleShapeRenderer();
+          shapeRenderer = widget.shapeRenderer ?? CircleShapeRenderer();
           break;
         case ConfettiStyle.star:
           shapeRenderer = StarShapeRenderer(points: 5);
           break;
         case ConfettiStyle.emoji:
-          shapeRenderer = EmojiShapeRenderer(emoji: emoji ?? '🎉');
+          shapeRenderer = EmojiShapeRenderer(emoji: emoji!);
           break;
         case ConfettiStyle.ribbons:
           shapeRenderer = RibbonShapeRenderer();
@@ -256,8 +258,6 @@ class _ConfettiDialogState extends State<ConfettiDialog>
         case ConfettiStyle.paper:
           shapeRenderer = PaperShapeRenderer();
           break;
-        default:
-          shapeRenderer = CircleShapeRenderer();
       }
 
       _particles.add(
@@ -426,27 +426,10 @@ class _ConfettiDialogState extends State<ConfettiDialog>
         List<String> failedEmojis = ['🎮', '🔄', '🚀', '💪', '✨', '👾', '🎯'];
         return failedEmojis[rand.nextInt(failedEmojis.length)];
       case ConfettiType.celebration:
-        List<String> celebrationEmojis = [
-          '🎉',
-          '🎊',
-          '🥳',
-          '🎈',
-          '🎂',
-          '🎁',
-          '💃',
-          '🕺'
-        ];
+        List<String> celebrationEmojis = ['🎉', '🎊', '🥳', '🎈', '🎂', '🎁', '💃', '🕺'];
         return celebrationEmojis[rand.nextInt(celebrationEmojis.length)];
       case ConfettiType.achievement:
-        List<String> achievementEmojis = [
-          '🏆',
-          '🥇',
-          '🏅',
-          '⭐',
-          '✨',
-          '💪',
-          '👑'
-        ];
+        List<String> achievementEmojis = ['🏆', '🥇', '🏅', '⭐', '✨', '💪', '👑'];
         return achievementEmojis[rand.nextInt(achievementEmojis.length)];
       case ConfettiType.levelUp:
         List<String> levelUpEmojis = ['⬆️', '🚀', '💯', '⚡', '🔥', '🌟', '🆙'];
@@ -456,8 +439,8 @@ class _ConfettiDialogState extends State<ConfettiDialog>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Dialog(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -487,9 +470,7 @@ class _ConfettiDialogState extends State<ConfettiDialog>
                     return AnimatedOpacity(
                       opacity: _fadeAnimation.value,
                       duration: const Duration(milliseconds: 300),
-                      child: Transform.scale(
-                          scale: _scaleAnimation.value,
-                          child: widget.cardDialog),
+                      child: Transform.scale(scale: _scaleAnimation.value, child: widget.cardDialog),
                     );
                   },
                 ),
