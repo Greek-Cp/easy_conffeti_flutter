@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  confetti: ^0.8.0
   # Remove the circular dependency to easy_conffeti
 
 dev_dependencies:
